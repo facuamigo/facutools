@@ -73,12 +73,25 @@ class FacuamigoManager:
 
         return info
     
-    def delete_facuamigo_agent(self, agent_path: str, project_name: str, data_store_path: str):
-        agent = self.agent_manager.get_agent(agent_name=agent_path)
-        datastore = self.datastore_manager.get_datastore(project_name=project_name, data_store_name=data_store_path)
+    def delete_facuamigo_agent(self, subject_id: str):
+        data_stores = self.datastore_manager.list_datastores(project_name='guias-uba')
+        engines = self.datastore_manager.list_engines(project_name='guias-uba')
 
-        self.agent_manager.delete_agent(agent=agent)
-        self.datastore_manager.delete_datastore(datastore=datastore)
+        for data_store in data_stores:
+            data_store_path = data_store.name
+
+            if subject_id in data_store_path:
+                has_engine = False
+
+                for engine in engines:
+                    if data_store.display_name in engine.data_store_ids:
+                        has_engine = True
+                        break
+
+                if has_engine:
+                    self.datastore_manager.delete_engine(engine.name)
+
+                self.datastore_manager.delete_datastore(data_store_path)
 
     def query_facuamigo_agent(self, agent_name: str, query_text: str, session_id: UUID):
         agent = self.agent_manager.get_agent(agent_name=agent_name)
