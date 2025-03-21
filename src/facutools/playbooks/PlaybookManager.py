@@ -10,10 +10,14 @@ class PlaybookManager:
         self.datastore_manager: DatastoreManager = DatastoreManager(credentials=credentials)
         self.agent_manager: AgentManager = AgentManager(credentials=credentials, project_name="guias-uba")
 
-    def create_playbook(self, agent: dfcx3.Agent, playbook_display_name: str, playbook_subject_name: str, tool: dfcx3.Tool):
+    def create_playbook(self, agent: dfcx3.Agent, playbook_display_name: str, playbook_subject_name: str, tool: dfcx3.Tool, is_specialized: bool = False, document_name: str = None):
         playbook = dfcx3.Playbook()
         playbook.display_name = "AI Assistant Playbook"
-        playbook.goal = f'Your goal is to help the user by answering his questions about a subject called "{playbook_subject_name}" based on your knowledge. You have to always answer in Spanish and only to questions related to the specified subject.'
+
+        if is_specialized and document_name:
+            playbook.goal = f'Your goal is to help the user by answering his questions about a subject called "{playbook_subject_name}" based on your knowledge. You are specialized in a document called "{document_name}". You have to always answer in Spanish and only to questions related to the specified subject.'
+        else:
+            playbook.goal = f'Your goal is to help the user by answering his questions about a subject called "{playbook_subject_name}" based on your knowledge. You have to always answer in Spanish and only to questions related to the specified subject.'
         
         steps = [
             playbook.Step(text="Greet the users, then ask how you can help them today."),
@@ -38,3 +42,8 @@ class PlaybookManager:
         self.agent_manager.update_agent(agent=agent)
 
         return response
+    
+    def get_playbook(self, playbook_name: str):
+        request = dfcx3.GetPlaybookRequest(name=playbook_name)
+
+        return self.client.get_playbook(request=request)

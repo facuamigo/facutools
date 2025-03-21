@@ -29,3 +29,8 @@ class ToolManager:
         request = dfcx3.CreateToolRequest(parent=agent.name, tool=tool)
         response = self.client.create_tool(request=request)
         return response
+    
+    def get_tool(self, tool_name: str):
+        request = dfcx3.GetToolRequest(name=tool_name)
+        return self.client.get_tool(request=request)
+    

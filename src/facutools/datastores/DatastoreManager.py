@@ -1,5 +1,5 @@
 from google.cloud import discoveryengine
-import google.longrunning.operations_proto
+from google.longrunning import operations_proto
 
 
 class DatastoreManager:
@@ -71,7 +71,7 @@ class DatastoreManager:
 
         return self.datastore_client.update_data_store(request=request)
 
-    def upload_pdf_to_datastore(self, data_store_name: str, pdf_path: str):
+    def upload_pdf_to_datastore(self, data_store_name: str, pdf_path: str) -> operations_proto.Operation:
         parent = f'{data_store_name}/branches/default_branch'
         request = discoveryengine.ImportDocumentsRequest(
             parent=parent,
