@@ -13,6 +13,7 @@ class AgentManager:
         agent.display_name = agent_display_name
         agent.default_language_code = agent_default_language_code
         agent.time_zone = agent_time_zone
+        agent.advanced_settings.logging_settings.enable_interaction_logging = True
 
         request = dfcx3.CreateAgentRequest(
             parent=f"projects/{self.project_name}/locations/global",

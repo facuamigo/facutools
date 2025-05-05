@@ -21,10 +21,11 @@ class DatastoreManager:
         data_store.content_config = discoveryengine.DataStore.ContentConfig.CONTENT_REQUIRED
         data_store.document_processing_config = discoveryengine.DocumentProcessingConfig(
             default_parsing_config=discoveryengine.DocumentProcessingConfig.ParsingConfig(
-                ocr_parsing_config=discoveryengine.DocumentProcessingConfig.ParsingConfig.OcrParsingConfig()
+                ocr_parsing_config=discoveryengine.DocumentProcessingConfig.ParsingConfig.OcrParsingConfig(
+                    use_native_text=True
+                )
             )
         )
-
         request = discoveryengine.CreateDataStoreRequest(
             parent=f"projects/{project_name}/locations/global/collections/default_collection",
             data_store=data_store,
